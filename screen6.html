@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trip Dashboard - Screen 6</title>
+<style>
+    /* Background */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #89f7fe, #66a6ff);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 20px;
+        color: white;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    /* Glassmorphism Card */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        transition: transform 0.3s ease;
+    }
+    .glass-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Header */
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Search + Filters */
+    .filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+    input, select {
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+    option {
+        color: black;
+    }
+
+    /* Trip sections */
+    .section-title {
+        font-size: 1.2em;
+        margin: 15px 0 10px;
+        font-weight: bold;
+    }
+
+    .trip-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 10px;
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .trip-card:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.02);
+    }
+
+    /* Buttons */
+    .btn {
+        display: inline-block;
+        background: linear-gradient(45deg, #ff758c, #ff7eb3);
+        padding: 10px 15px;
+        border-radius: 10px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 10px;
+        text-decoration: none;
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .btn:hover {
+        transform: translateY(-2px);
+        background: linear-gradient(45deg, #ff7eb3, #ff758c);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+        .filters {
+            flex-direction: column;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🌍 Your Trips</h1>
+
+    <!-- Search & Filter -->
+    <div class="filters glass-card">
+        <input type="text" id="search" placeholder="Search trips...">
+        <select id="filter">
+            <option value="all">All</option>
+            <option value="ongoing">Ongoing</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="completed">Completed</option>
+        </select>
+        <select id="sort">
+            <option value="date">Sort by Date</option>
+            <option value="name">Sort by Name</option>
+        </select>
+    </div>
+
+    <!-- Plan New Trip -->
+    <div class="glass-card">
+        <h2>✈️ Plan a New Trip</h2>
+        <p>Start planning your dream vacation today with personalized recommendations and budget tracking.</p>
+        <a href="#" class="btn">Plan Now</a>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="glass-card">
+        <h2>💡 Suggestions for Your Next Adventure</h2>
+        <div class="trip-card">🏝 Bali - 7 Days of Sun & Surf</div>
+        <div class="trip-card">🏔 Swiss Alps - Winter Wonderland</div>
+        <div class="trip-card">🏙 Tokyo - City Lights & Culture</div>
+    </div>
+
+    <!-- Trip List -->
+    <div class="glass-card">
+        <div class="section-title">Ongoing</div>
+        <div class="trip-card">Paris City Tour - 5 Days Left</div>
+
+        <div class="section-title">Upcoming</div>
+        <div class="trip-card">Dubai Desert Safari - Starts in 10 Days</div>
+
+        <div class="section-title">Completed</div>
+        <div class="trip-card">New York Food Tour - Completed Last Month</div>
+    </div>
+</div>
+
+<script>
+    const searchInput = document.getElementById('search');
+    const filterSelect = document.getElementById('filter');
+    const tripCards = document.querySelectorAll('.trip-card');
+
+    searchInput.addEventListener('input', () => {
+        const searchValue = searchInput.value.toLowerCase();
+        tripCards.forEach(card => {
+            card.style.display = card.textContent.toLowerCase().includes(searchValue) ? '' : 'none';
+        });
+    });
+
+    filterSelect.addEventListener('change', () => {
+        const value = filterSelect.value;
+        tripCards.forEach(card => {
+            if (value === 'all') {
+                card.style.display = '';
+            } else if (card.parentElement.previousElementSibling &&
+                       card.parentElement.previousElementSibling.textContent.toLowerCase().includes(value)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
