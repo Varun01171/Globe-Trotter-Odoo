@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Build Itinerary - GlobalTrotter</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+      color: white;
+    }
+    .container {
+      max-width: 950px;
+      width: 100%;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 2.2rem;
+    }
+    .trip-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      padding: 20px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .trip-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .trip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .trip-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    .trip-desc {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      margin-bottom: 15px;
+    }
+    .trip-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .trip-inputs input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      outline: none;
+    }
+    input[type="date"] {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
+    }
+    .add-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #ff7eb3, #ff758c);
+      border: none;
+      border-radius: 15px;
+      color: white;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .add-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    }
+    .total-budget {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-top: 20px;
+      text-align: right;
+    }
+    .section-title-input {
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      outline: none;
+      min-width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🗺️ Plan Your Trip</h1>
+    <form action="/save_itinerary" method="POST" id="itinerary-form">
+      <div id="sections-container">
+        <div class="trip-card">
+          <div class="trip-header">
+            <input
+              type="text"
+              name="section_title_0"
+              class="section-title-input"
+              value="Hotel Stay"
+              required
+            />
+          </div>
+          <div class="trip-desc">Add details about your Hotel stays.</div>
+          <div class="trip-inputs">
+            <input type="date" name="hotel_start_0" required />
+            <input type="date" name="hotel_end_0" required />
+            <input
+              type="number"
+              min="0"
+              name="hotel_budget_0"
+              class="budget-input"
+              placeholder="Budget for this section"
+              required
+            />
+          </div>
+        </div>
+        <div class="trip-card">
+          <div class="trip-header">
+            <input
+              type="text"
+              name="section_title_1"
+              class="section-title-input"
+              value="Travel"
+              required
+            />
+          </div>
+          <div class="trip-desc">Add details about your Travelling expenses.</div>
+          <div class="trip-inputs">
+            <input type="date" name="travel_start_1" required />
+            <input type="date" name="travel_end_1" required />
+            <input
+              type="number"
+              min="0"
+              name="travel_budget_1"
+              class="budget-input"
+              placeholder="Budget for this section"
+              required
+            />
+          </div>
+        </div>
+        <div class="trip-card">
+          <div class="trip-header">
+            <input
+              type="text"
+              name="section_title_2"
+              class="section-title-input"
+              value="Food"
+              required
+            />
+          </div>
+          <div class="trip-desc">Add details about your Food expenses.</div>
+          <div class="trip-inputs">
+            <input type="date" name="food_start_2" required />
+            <input type="date" name="food_end_2" required />
+            <input
+              type="number"
+              min="0"
+              name="food_budget_2"
+              class="budget-input"
+              placeholder="Budget for this section"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <div class="total-budget" id="total-budget">Total Budget: ₹0</div>
+      <button type="submit" class="add-btn">Done</button>
+    </form>
+    <button type="button" id="add-section-btn" class="add-btn">+ Add Another Section</button>
+  </div>
+  <script>
+    let sectionCount = 3; // We already have 3 sections initially
+    const sectionsContainer = document.getElementById('sections-container');
+    const addSectionBtn = document.getElementById('add-section-btn');
+    const totalBudgetEl = document.getElementById('total-budget');
+
+    addSectionBtn.addEventListener('click', () => {
+      const newSection = document.createElement('div');
+      newSection.className = 'trip-card';
+      newSection.innerHTML = `
+        <div class="trip-header">
+          <input
+            type="text"
+            name="section_title_${sectionCount}"
+            class="section-title-input"
+            placeholder="Section Title"
+            required
+          />
+        </div>
+        <div class="trip-desc">Add details about your ${sectionCount + 1} section.</div>
+        <div class="trip-inputs">
+          <input type="date" name="start_${sectionCount}" required />
+          <input type="date" name="end_${sectionCount}" required />
+          <input
+            type="number"
+            min="0"
+            name="budget_${sectionCount}"
+            class="budget-input"
+            placeholder="Budget for this section"
+            required
+          />
+        </div>
+      `;
+      sectionsContainer.appendChild(newSection);
+      sectionCount++;
+      attachBudgetListeners();
+    });
+
+    function calculateTotalBudget() {
+      const budgetInputs = document.querySelectorAll('.budget-input');
+      let total = 0;
+      budgetInputs.forEach(input => {
+        const val = parseFloat(input.value);
+        if (!isNaN(val) && val > 0) total += val;
+      });
+      totalBudgetEl.textContent = `Total Budget: ₹${total.toFixed(2)}`;
+    }
+
+    function attachBudgetListeners() {
+      const budgetInputs = document.querySelectorAll('.budget-input');
+      budgetInputs.forEach(input => {
+        input.removeEventListener('input', calculateTotalBudget);
+        input.addEventListener('input', calculateTotalBudget);
+      });
+    }
+
+    // Initial attach on page load
+    attachBudgetListeners();
+    calculateTotalBudget();
+  </script>
+</body>
+</html>

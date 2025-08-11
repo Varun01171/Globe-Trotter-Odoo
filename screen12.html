@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalTrotter Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --background: 222.2 84% 4.9%;
+            --foreground: 210 40% 98%;
+            --card: 222.2 84% 4.9%;
+            --card-foreground: 210 40% 98%;
+            --popover: 222.2 84% 4.9%;
+            --popover-foreground: 210 40% 98%;
+            --primary: 200 98% 50%;
+            --primary-foreground: 222.2 84% 4.9%;
+            --secondary: 217.2 32.6% 17.5%;
+            --secondary-foreground: 210 40% 98%;
+            --muted: 217.2 32.6% 17.5%;
+            --muted-foreground: 215 20.2% 65.1%;
+            --accent: 142 76% 36%;
+            --accent-foreground: 210 40% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 217.2 32.6% 17.5%;
+            --input: 217.2 32.6% 17.5%;
+            --ring: 200 98% 50%;
+            --chart-primary: 200 98% 50%;
+            --chart-secondary: 142 76% 36%;
+            --chart-tertiary: 25 95% 60%;
+            --chart-quaternary: 0 84% 60%;
+            --radius: 0.5rem;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .header {
+            background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+            padding: 2rem;
+            border-radius: var(--radius);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .tabs {
+            margin-bottom: 2rem;
+        }
+
+        .tabs-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background-color: hsl(var(--secondary));
+            border-radius: var(--radius);
+            padding: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-trigger {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border: none;
+            background: transparent;
+            color: hsl(var(--muted-foreground));
+            border-radius: calc(var(--radius) - 0.25rem);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .tab-trigger.active {
+            background-color: hsl(var(--primary));
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .card {
+            background-color: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .card-gradient {
+            background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--secondary) / 0.2) 100%);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: hsl(var(--foreground));
+        }
+
+        .card-title-large {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-subtitle {
+            font-size: 0.75rem;
+            color: hsl(var(--muted-foreground));
+        }
+
+        .icon {
+            width: 1rem;
+            height: 1rem;
+            color: hsl(var(--primary));
+        }
+
+        .icon-accent { color: hsl(var(--accent)); }
+        .icon-tertiary { color: hsl(var(--chart-tertiary)); }
+        .icon-quaternary { color: hsl(var(--chart-quaternary)); }
+
+        .user-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            background-color: hsl(var(--secondary) / 0.2);
+        }
+
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-email {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .stat-label {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.75rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: calc(var(--radius) / 2);
+        }
+
+        .badge-active {
+            background-color: hsl(var(--primary));
+            color: white;
+        }
+
+        .badge-inactive {
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            background-color: transparent;
+            color: hsl(var(--foreground));
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background-color: hsl(var(--secondary));
+        }
+
+        .city-list, .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .city-item, .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .rank-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: hsl(var(--muted-foreground));
+            margin-right: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 0.5rem;
+            background-color: hsl(var(--secondary));
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: hsl(var(--primary));
+            transition: width 0.3s ease;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--border)) 100%);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: hsl(var(--muted-foreground));
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .tabs-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .user-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .user-stats {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>GlobalTrotter Admin Dashboard</h1>
+            <p>Travel Analytics & User Management Platform</p>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <div class="tabs-list">
+                <button class="tab-trigger active" onclick="showTab('manage-users')">Manage Users</button>
+                <button class="tab-trigger" onclick="showTab('popular-cities')">Popular Cities</button>
+                <button class="tab-trigger" onclick="showTab('popular-activities')">Popular Activities</button>
+                <button class="tab-trigger" onclick="showTab('user-trends')">User Trends & Analytics</button>
+            </div>
+
+            <!-- Manage Users Tab -->
+            <div id="manage-users" class="tab-content active">
+                <div class="grid grid-cols-3" style="margin-bottom: 2rem;">
+                    <div class="card card-gradient">
+                        <div class="card-header">
+                            <div class="card-title">Total Users</div>
+                            <svg class="icon" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <div class="metric-value">2,849</div>
+                        <div class="metric-subtitle">+12% from last month</div>
+                    </div>
+
+                    <div class="card card-gradient">
+                        <div class="card-header">
+                            <div class="card-title">Active Users</div>
+                            <svg class="icon icon-accent" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <div class="metric-value">1,247</div>
+                        <div class="metric-subtitle">+8% from last week</div>
+                    </div>
+
+                    <div class="card card-gradient">
+                        <div class="card-header">
+                            <div class="card-title">Total Trips</div>
+                            <svg class="icon icon-tertiary" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                        </div>
+                        <div class="metric-value">18,394</div>
+                        <div class="metric-subtitle">+23% from last month</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title-large">Recent Users</div>
+                    <div class="card-description">Manage users and view their trip history and activities</div>
+
+                    <div class="user-list">
+                        <div class="user-item">
+                            <div style="display: flex; align-items: center;">
+                                <div class="user-avatar">S</div>
+                                <div class="user-info">
+                                    <div class="user-name">Sarah Johnson</div>
+                                    <div class="user-email">sarah@example.com</div>
+                                </div>
+                            </div>
+                            <div class="user-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value">12</div>
+                                    <div class="stat-label">Trips</div>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="badge badge-active">active</span>
+                                    <div class="stat-label" style="margin-top: 0.25rem;">2 hours ago</div>
+                                </div>
+                                <button class="btn">View Trips</button>
+                            </div>
+                        </div>
+
+                        <div class="user-item">
+                            <div style="display: flex; align-items: center;">
+                                <div class="user-avatar">M</div>
+                                <div class="user-info">
+                                    <div class="user-name">Mike Chen</div>
+                                    <div class="user-email">mike@example.com</div>
+                                </div>
+                            </div>
+                            <div class="user-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value">8</div>
+                                    <div class="stat-label">Trips</div>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="badge badge-inactive">inactive</span>
+                                    <div class="stat-label" style="margin-top: 0.25rem;">1 day ago</div>
+                                </div>
+                                <button class="btn">View Trips</button>
+                            </div>
+                        </div>
+
+                        <div class="user-item">
+                            <div style="display: flex; align-items: center;">
+                                <div class="user-avatar">E</div>
+                                <div class="user-info">
+                                    <div class="user-name">Emma Davis</div>
+                                    <div class="user-email">emma@example.com</div>
+                                </div>
+                            </div>
+                            <div class="user-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value">15</div>
+                                    <div class="stat-label">Trips</div>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="badge badge-active">active</span>
+                                    <div class="stat-label" style="margin-top: 0.25rem;">30 minutes ago</div>
+                                </div>
+                                <button class="btn">View Trips</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Cities Tab -->
+            <div id="popular-cities" class="tab-content">
+                <div class="card">
+                    <div class="card-title-large">Most Popular Cities</div>
+                    <div class="card-description">Cities ranked by visitor count and trending growth based on current user data</div>
+
+                    <div class="city-list">
+                        <div>
+                            <div class="city-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="rank-number">#1</div>
+                                    <div>
+                                        <div style="font-size: 1.125rem; font-weight: 500;">Paris</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.875rem;">France</div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 2rem; text-align: right;">
+                                    <div>
+                                        <div style="font-weight: 500; font-size: 0.875rem;">2,847</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Visits</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 500; font-size: 0.875rem; color: hsl(var(--accent));">+15.2%</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Growth</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="city-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="rank-number">#2</div>
+                                    <div>
+                                        <div style="font-size: 1.125rem; font-weight: 500;">Tokyo</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.875rem;">Japan</div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 2rem; text-align: right;">
+                                    <div>
+                                        <div style="font-weight: 500; font-size: 0.875rem;">2,341</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Visits</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 500; font-size: 0.875rem; color: hsl(var(--accent));">+12.8%</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Growth</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 82%;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="city-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="rank-number">#3</div>
+                                    <div>
+                                        <div style="font-size: 1.125rem; font-weight: 500;">New York</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.875rem;">USA</div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 2rem; text-align: right;">
+                                    <div>
+                                        <div style="font-weight: 500; font-size: 0.875rem;">2,156</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Visits</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 500; font-size: 0.875rem; color: hsl(var(--accent));">+8.4%</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Growth</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 76%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Activities Tab -->
+            <div id="popular-activities" class="tab-content">
+                <div class="card">
+                    <div class="card-title-large">Trending Activities</div>
+                    <div class="card-description">Most popular activities and experiences based on user bookings and trends</div>
+
+                    <div class="activity-list">
+                        <div>
+                            <div class="city-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="rank-number">#1</div>
+                                    <div>
+                                        <div style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">City Walking Tours</div>
+                                        <div style="display: flex; gap: 1rem; align-items: center;">
+                                            <span class="badge" style="background-color: hsl(var(--primary)); color: white;">Cultural</span>
+                                            <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                                <svg style="width: 1rem; height: 1rem; color: hsl(var(--chart-tertiary));" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                                </svg>
+                                                <span style="font-size: 0.875rem; font-weight: 500;">4.8</span>
+                                            </div>
+                                            <span style="color: hsl(var(--muted-foreground)); font-size: 0.875rem;">3-4 hours</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 2rem; text-align: right;">
+                                    <div>
+                                        <div style="font-weight: 500; font-size: 0.875rem;">3,245</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Bookings</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 500; font-size: 0.875rem; color: hsl(var(--accent));">+24.5%</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Growth</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="city-item">
+                                <div style="display: flex; align-items: center;">
+                                    <div class="rank-number">#2</div>
+                                    <div>
+                                        <div style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem;">Food & Wine Experiences</div>
+                                        <div style="display: flex; gap: 1rem; align-items: center;">
+                                            <span class="badge" style="background-color: hsl(var(--accent)); color: white;">Culinary</span>
+                                            <div style="display: flex; align-items: center; gap: 0.25rem;">
+                                                <svg style="width: 1rem; height: 1rem; color: hsl(var(--chart-tertiary));" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                                </svg>
+                                                <span style="font-size: 0.875rem; font-weight: 500;">4.9</span>
+                                            </div>
+                                            <span style="color: hsl(var(--muted-foreground)); font-size: 0.875rem;">2-3 hours</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 2rem; text-align: right;">
+                                    <div>
+                                        <div style="font-weight: 500; font-size: 0.875rem;">2,876</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Bookings</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 500; font-size: 0.875rem; color: hsl(var(--accent));">+18.2%</div>
+                                        <div style="color: hsl(var(--muted-foreground)); font-size: 0.75rem;">Growth</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 89%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Trends Tab -->
+            <div id="user-trends" class="tab-content">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                    <div class="card">
+                        <div class="card-title-large">City Visits Trends</div>
+                        <div class="card-description">Number of cities visited by users over time</div>
+                        <div class="chart-placeholder">Line Chart: Cities Visited Over Time</div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title-large">Age Demographics</div>
+                        <div class="card-description">User distribution by age groups</div>
+                        <div class="chart-placeholder">Pie Chart: Age Distribution</div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-title-large">Cities Visited Analytics</div>
+                    <div class="card-description">Monthly trends of unique cities visited by users</div>
+                    <div class="chart-placeholder">Bar Chart: Monthly City Visits</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title-large">Regional Distribution</div>
+                    <div class="card-description">User base breakdown by geographical regions</div>
+
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: hsl(var(--secondary) / 0.2); border-radius: var(--radius);">
+                            <div style="font-weight: 500;">Europe</div>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="color: hsl(var(--muted-foreground)); font-size: 0.875rem;">6,420 users</div>
+                                <div style="font-size: 1.125rem; font-weight: bold; color: hsl(var(--primary));">45%</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: hsl(var(--secondary) / 0.2); border-radius: var(--radius);">
+                            <div style="font-weight: 500;">North America</div>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="color: hsl(var(--muted-foreground)); font-size: 0.875rem;">4,012 users</div>
+                                <div style="font-size: 1.125rem; font-weight: bold; color: hsl(var(--primary));">28%</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: hsl(var(--secondary) / 0.2); border-radius: var(--radius);">
+                            <div style="font-weight: 500;">Asia Pacific</div>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="color: hsl(var(--muted-foreground)); font-size: 0.875rem;">2,574 users</div>
+                                <div style="font-size: 1.125rem; font-weight: bold; color: hsl(var(--primary));">18%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all triggers
+            const triggers = document.querySelectorAll('.tab-trigger');
+            triggers.forEach(trigger => trigger.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked trigger
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

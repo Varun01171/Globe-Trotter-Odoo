@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activity Calendar View</title>
+    <link rel="stylesheet" href="final.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        /* Design System Variables */
+        :root {
+            --background: hsl(220, 26%, 8%);
+            --foreground: hsl(210, 40%, 92%);
+            --card: hsl(220, 23%, 11%);
+            --card-foreground: hsl(210, 40%, 92%);
+            --primary: hsl(142, 76%, 36%);
+            --primary-foreground: hsl(220, 26%, 8%);
+            --secondary: hsl(220, 20%, 14%);
+            --secondary-foreground: hsl(210, 40%, 85%);
+            --muted: hsl(220, 18%, 16%);
+            --muted-foreground: hsl(215, 20.2%, 60%);
+            --accent: hsl(220, 18%, 16%);
+            --accent-foreground: hsl(210, 40%, 92%);
+            --border: hsl(220, 18%, 18%);
+            --input: hsl(220, 18%, 18%);
+            --ring: hsl(142, 76%, 36%);
+            --radius: 0.75rem;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            border-bottom: 1px solid var(--border);
+            background-color: hsla(var(--card), 0.3);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius);
+            color: var(--foreground);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: background-color 0.2s;
+        }
+        .back-btn:hover {
+            background-color: var(--accent);
+        }
+        .globe-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        .header-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--foreground);
+        }
+        .header-text p {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+        .header-right p {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        /* Search Section */
+        .search-section {
+            margin-bottom: 2rem;
+        }
+        .search-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .search-group {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background-color: var(--background);
+            border: 1px solid var(--input);
+            border-radius: var(--radius);
+            color: var(--foreground);
+            font-size: 1rem;
+        }
+        .search-input::placeholder {
+            color: var(--muted-foreground);
+        }
+        .search-input:focus {
+            outline: none;
+            ring: 2px solid var(--ring);
+        }
+        .filter-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+        .filter-btn:hover {
+            opacity: 0.9;
+        }
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+        }
+        .filter-select {
+            padding: 0.5rem 1rem;
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--foreground);
+            cursor: pointer;
+        }
+
+        /* Calendar Layout */
+        .calendar-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+        @media (max-width: 1024px) {
+            .calendar-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Calendar Section */
+        .calendar-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+        .calendar-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 1.5rem;
+        }
+        .calendar-header {
+            margin-bottom: 1rem;
+        }
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .nav-btn {
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            color: var(--foreground);
+            cursor: pointer;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+        }
+        .nav-btn:hover {
+            background-color: var(--accent);
+        }
+        .month-year {
+            font-weight: 600;
+            color: var(--foreground);
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            width: 100%;
+        }
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .weekday {
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--muted-foreground);
+        }
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.25rem;
+        }
+        .day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0.25rem;
+            border: 1px solid hsla(var(--border), 0.5);
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            min-height: 4rem;
+        }
+        .day:hover {
+            background-color: var(--accent);
+        }
+        .day.selected {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+        .day.today {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+        .day.other-month {
+            color: var(--muted-foreground);
+            opacity: 0.5;
+        }
+        .day-number {
+            font-size: 0.875rem;
+        }
+        .has-activities .day-number {
+            font-weight: 600;
+        }
+        .activity-indicators {
+            position: absolute;
+            bottom: 0.25rem;
+            left: 0.25rem;
+            right: 0.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.125rem;
+        }
+        .activity-dot {
+            font-size: 0.5rem;
+            background-color: hsla(var(--primary), 0.2);
+            color: var(--primary);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .activity-more {
+            font-size: 0.5rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Details Section */
+        .details-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+        .details-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 1rem;
+        }
+        .activities-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .activity-item {
+            padding: 1rem;
+            background-color: hsla(var(--accent), 0.5);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+        .activity-title {
+            font-weight: 500;
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+        }
+        .activity-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            margin-bottom: 0.5rem;
+        }
+        .activity-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        .activity-price {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        .activity-participants {
+            color: var(--muted-foreground);
+        }
+        .activity-tags {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            background-color: hsla(var(--primary), 0.1);
+            color: var(--primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            .search-group {
+                flex-direction: column;
+            }
+            .filter-controls {
+                flex-direction: column;
+            }
+            .day {
+                min-height: 3rem;
+            }
+            .activity-dot {
+                font-size: 0.625rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <button class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </button>
+                    <i class="fas fa-globe globe-icon"></i>
+                    <div class="header-text">
+                        <h1>Calendar View</h1>
+                        <p>Your Activity Itinerary</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <p>GlobalTrotter</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Search & Filters -->
+            <div class="search-section">
+                <div class="search-filters">
+                    <div class="search-group">
+                        <input type="text" placeholder="Search activities..." class="search-input" />
+                        <button class="filter-btn">
+                            <i class="fas fa-filter"></i>
+                            Filter
+                        </button>
+                    </div>
+                    <div class="filter-controls">
+                        <select class="filter-select">
+                            <option value="none">Group by: None</option>
+                            <option value="date">Date</option>
+                            <option value="location">Location</option>
+                            <option value="type">Type</option>
+                        </select>
+                        <select class="filter-select">
+                            <option value="relevance">Sort by: Relevance</option>
+                            <option value="date">Date</option>
+                            <option value="price">Price</option>
+                            <option value="rating">Rating</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calendar-layout">
+                <!-- Calendar -->
+                <div class="calendar-section">
+                    <div class="calendar-card">
+                        <h2 class="calendar-title">December 2024</h2>
+                        <div class="calendar">
+                            <div class="calendar-header">
+                                <div class="calendar-nav">
+                                    <button class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+                                    <span class="month-year">December 2024</span>
+                                    <button class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                            </div>
+                            <div class="calendar-grid">
+                                <div class="weekdays">
+                                    <div class="weekday">Sun</div>
+                                    <div class="weekday">Mon</div>
+                                    <div class="weekday">Tue</div>
+                                    <div class="weekday">Wed</div>
+                                    <div class="weekday">Thu</div>
+                                    <div class="weekday">Fri</div>
+                                    <div class="weekday">Sat</div>
+                                </div>
+                                <div class="calendar-days">
+                                    <!-- Previous month days -->
+                                    <div class="day other-month">24</div>
+                                    <div class="day other-month">25</div>
+                                    <div class="day other-month">26</div>
+                                    <div class="day other-month">27</div>
+                                    <div class="day other-month">28</div>
+                                    <div class="day other-month">29</div>
+                                    <div class="day other-month">30</div>
+
+                                    <!-- Current month days -->
+                                    <div class="day">1</div>
+                                    <div class="day">2</div>
+                                    <div class="day">3</div>
+                                    <div class="day">4</div>
+                                    <div class="day">5</div>
+                                    <div class="day">6</div>
+                                    <div class="day">7</div>
+                                    <div class="day">8</div>
+                                    <div class="day">9</div>
+                                    <div class="day">10</div>
+                                    <div class="day">11</div>
+                                    <div class="day">12</div>
+                                    <div class="day">13</div>
+                                    <div class="day">14</div>
+
+                                    <!-- Day with activities -->
+                                    <div class="day has-activities selected">
+                                        <span class="day-number">15</span>
+                                        <div class="activity-indicators">
+                                            <div class="activity-dot">Paragliding</div>
+                                            <div class="activity-dot">Hiking Tour</div>
+                                            <div class="activity-more">+1 more</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="day">16</div>
+                                    <div class="day">17</div>
+                                    <div class="day">18</div>
+                                    <div class="day">19</div>
+                                    <div class="day today">20</div>
+
+                                    <!-- Another day with activities -->
+                                    <div class="day has-activities">
+                                        <span class="day-number">21</span>
+                                        <div class="activity-indicators">
+                                            <div class="activity-dot">Rock Climbing</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="day">22</div>
+                                    <div class="day">23</div>
+                                    <div class="day">24</div>
+                                    <div class="day">25</div>
+                                    <div class="day">26</div>
+                                    <div class="day">27</div>
+                                    <div class="day">28</div>
+                                    <div class="day">29</div>
+                                    <div class="day">30</div>
+                                    <div class="day">31</div>
+
+                                    <!-- Next month days -->
+                                    <div class="day other-month">1</div>
+                                    <div class="day other-month">2</div>
+                                    <div class="day other-month">3</div>
+                                    <div class="day other-month">4</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Details -->
+                <div class="details-section">
+                    <div class="details-card">
+                        <h3 class="details-title">Sunday, December 15</h3>
+                        <div class="activities-list">
+                            <div class="activity-item">
+                                <h4 class="activity-title">Paragliding Adventure</h4>
+                                <p class="activity-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Interlaken, Switzerland
+                                </p>
+                                <div class="activity-meta">
+                                    <span class="activity-price">$120</span>
+                                    <span class="activity-participants">8/12 participants</span>
+                                </div>
+                                <div class="activity-tags">
+                                    <span class="tag">Adventure</span>
+                                    <span class="tag">Outdoor</span>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <h4 class="activity-title">Mountain Hiking Tour</h4>
+                                <p class="activity-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Swiss Alps, Switzerland
+                                </p>
+                                <div class="activity-meta">
+                                    <span class="activity-price">$45</span>
+                                    <span class="activity-participants">15/20 participants</span>
+                                </div>
+                                <div class="activity-tags">
+                                    <span class="tag">Hiking</span>
+                                    <span class="tag">Nature</span>
+                                </div>
+                            </div>
+
+                            <div class="activity-item">
+                                <h4 class="activity-title">Photography Workshop</h4>
+                                <p class="activity-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Lauterbrunnen, Switzerland
+                                </p>
+                                <div class="activity-meta">
+                                    <span class="activity-price">$80</span>
+                                    <span class="activity-participants">6/10 participants</span>
+                                </div>
+                                <div class="activity-tags">
+                                    <span class="tag">Photography</span>
+                                    <span class="tag">Workshop</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Simple calendar interaction
+        document.querySelectorAll('.day:not(.other-month)').forEach(day => {
+            day.addEventListener('click', function () {
+                document.querySelectorAll('.day').forEach(d => d.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+    </script>
+</body>
+</html>

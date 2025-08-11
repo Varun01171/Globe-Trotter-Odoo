@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GlobeTrotter - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #6dd5fa, #2980b9);
+      color: white;
+      padding: 20px;
+      padding-top: 70px; /* extra padding for fixed navbar */
+    }
+    /* Fixed Navbar styles */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(33, 37, 41, 0.95); /* slightly transparent dark */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 10000;
+    }
+    .navbar .logo {
+      font-weight: 700;
+      font-size: 24px;
+      user-select: none;
+    }
+    .navbar nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .navbar nav a:hover {
+      color: #ffb347; /* accent color on hover */
+    }
+    .banner {
+      background: url("{{ url_for('static', filename='images/banner.png') }}") center/cover no-repeat;
+      border-radius: 20px;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      color: white;
+      font-weight: bold;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .search-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+    .search-section input {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      outline: none;
+    }
+    .search-section input::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+    .search-section button {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      padding: 10px 15px;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .search-section button:hover {
+      background: rgba(255,255,255,0.3);
+    }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* bigger min width */
+      gap: 25px; /* bigger gap */
+      margin-bottom: 30px;
+    }
+    .card {
+      background: rgba(255,255,255,0.15);
+      border-radius: 15px;
+      height: 250px; /* bigger height */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      font-size: 18px; /* bigger font */
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    .card img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      transition: transform 0.3s ease;
+    }
+    .card:hover img {
+      transform: scale(1.05);
+    }
+    .card span {
+      position: relative;
+      z-index: 1;
+      background: rgba(0,0,0,0.4);
+      padding: 8px 14px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .prev-trips {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .trip-card {
+      background: rgba(255,255,255,0.15);
+      border-radius: 15px;
+      height: 150px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      font-size: 14px;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .trip-card img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      transition: transform 0.3s ease;
+    }
+    .trip-card:hover img {
+      transform: scale(1.05);
+    }
+    .trip-card span {
+      position: relative;
+      z-index: 1;
+      background: rgba(0,0,0,0.4);
+      padding: 5px 10px;
+      border-radius: 8px;
+      margin: 10px;
+    }
+    .plan-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #ffb347, #ff8c42);
+      padding: 12px 20px;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s ease;
+    }
+    .plan-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 5px 15px rgba(255,140,66,0.4);
+    }
+    @media (max-width: 900px) {
+      .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 20px;
+      }
+      .card {
+        height: 180px;
+        font-size: 16px;
+      }
+    }
+    @media (max-width: 600px) {
+      .banner {
+        font-size: 22px;
+        height: 150px;
+      }
+      .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 15px;
+      }
+      .card {
+        height: 140px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Fixed Navbar -->
+  <div class="navbar">
+    <div class="logo">🌍 GlobeTrotter</div>
+    <nav>
+      <a href="/profile">Profile</a>
+      <a href="/community">Community</a>
+      <a href="/screen8">Activities</a>
+      <a href="/calendar">Calendar</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </div>
+
+  <div class="banner">Explore the World with Us 🌏</div>
+
+  <div class="search-section">
+    <input type="text" id="searchBox" placeholder="Search..." />
+    <button onclick="groupByRegion()">Group by</button>
+    <button onclick="filterTrips()">Filter</button>
+    <button onclick="sortTrips()">Sort by...</button>
+  </div>
+
+  <h2>Top Regional Selections</h2>
+  <div class="card-grid" id="regionGrid">
+    <a href="jaipur.html" style="text-decoration:none; color:inherit;">
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/jaipur.jpeg') }}" alt="Jaipur" />
+        <span>Jaipur</span>
+      </div>
+    </a>
+    <div class="card">
+      <img src="{{ url_for('static', filename='images/shimla.jpeg') }}" alt="Shimla" />
+      <span>Shimla</span>
+    </div>
+    <div class="card">
+      <img src="{{ url_for('static', filename='images/pushkar.jpeg') }}" alt="Pushkar" />
+      <span>Pushkar</span>
+    </div>
+    <div class="card">
+      <img src="{{ url_for('static', filename='images/mumbai.jpg') }}" alt="Mumbai" />
+      <span>Mumbai</span>
+    </div>
+    <div class="card">
+      <img src="{{ url_for('static', filename='images/kerala.jpg') }}" alt="Kerala" />
+      <span>Kerala</span>
+    </div>
+  </div>
+
+  <h2>Previous Trips</h2>
+  <div class="prev-trips" id="tripGrid">
+    <div class="trip-card">
+      <img src="{{ url_for('static', filename='images/amritsar.jpg') }}" alt="Amritsar" />
+      <span>Amritsar</span>
+    </div>
+    <div class="trip-card">
+      <img src="{{ url_for('static', filename='images/puri.jpg') }}" alt="Puri" />
+      <span>Puri</span>
+    </div>
+    <div class="trip-card">
+      <img src="{{ url_for('static', filename='images/Vrindavan.jpg') }}" alt="Vrindavan" />
+      <span>Vrindavan</span>
+    </div>
+  </div>
+
+  <a href="{{ url_for('plan_trip') }}" class="plan-btn">+ Plan a Trip</a>
+
+  <script>
+    document.getElementById("searchBox").addEventListener("input", function () {
+      const query = this.value.toLowerCase();
+      document.querySelectorAll(".trip-card").forEach(card => {
+        card.style.display = card.textContent.toLowerCase().includes(query) ? "" : "none";
+      });
+    });
+
+    function sortTrips() {
+      const grid = document.getElementById("tripGrid");
+      let trips = Array.from(grid.children);
+      trips.sort((a, b) => a.textContent.localeCompare(b.textContent));
+      grid.innerHTML = "";
+      trips.forEach(t => grid.appendChild(t));
+    }
+
+    function filterTrips() {
+      document.querySelectorAll(".trip-card").forEach(card => {
+        card.style.display = card.textContent.includes("Trip") ? "" : "none";
+      });
+    }
+
+    function groupByRegion() {
+      const grid = document.getElementById("tripGrid");
+      let trips = Array.from(grid.children);
+      trips.sort((a, b) => a.textContent[0].localeCompare(b.textContent[0]));
+      grid.innerHTML = "";
+      trips.forEach(t => grid.appendChild(t));
+    }
+  </script>
+</body>
+</html>
