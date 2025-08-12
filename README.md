@@ -10,3 +10,4 @@ MySQL – Database to store cities, activities, users, and analytics data.
 Flask – Backend framework to handle routes, serve HTML templates, and provide API endpoints.
 Python – Logic layer for processing data, connecting to MySQL, and generating responses for the dashboard.
  
+Video link - https://drive.google.com/file/d/13lMTR1ePjQlkChiqkIl_xrfVQJTN_rai/view?usp=sharing
