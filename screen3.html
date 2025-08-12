@@ -7,215 +7,252 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-    body {
-      background: linear-gradient(135deg, #6dd5fa, #2980b9);
-      color: white;
-      padding: 20px;
-      padding-top: 70px; /* extra padding for fixed navbar */
-    }
-    /* Fixed Navbar styles */
-    .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: rgba(33, 37, 41, 0.95); /* slightly transparent dark */
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      z-index: 10000;
-    }
-    .navbar .logo {
-      font-weight: 700;
-      font-size: 24px;
-      user-select: none;
-    }
-    .navbar nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-weight: 500;
-      transition: color 0.3s ease;
-    }
-    .navbar nav a:hover {
-      color: #ffb347; /* accent color on hover */
-    }
-    .banner {
-      background: url("{{ url_for('static', filename='images/banner.png') }}") center/cover no-repeat;
-      border-radius: 20px;
-      height: 200px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 28px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-      color: white;
-      font-weight: bold;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    }
-    .search-section {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 25px;
-    }
-    .search-section input {
-      flex: 1;
-      min-width: 200px;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      outline: none;
-    }
-    .search-section input::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
-    .search-section button {
-      background: rgba(255,255,255,0.15);
-      border: none;
-      padding: 10px 15px;
-      border-radius: 10px;
-      color: white;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .search-section button:hover {
-      background: rgba(255,255,255,0.3);
-    }
-    h2 {
-      font-size: 20px;
-      margin-bottom: 15px;
-    }
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* bigger min width */
-      gap: 25px; /* bigger gap */
-      margin-bottom: 30px;
-    }
-    .card {
-      background: rgba(255,255,255,0.15);
-      border-radius: 15px;
-      height: 250px; /* bigger height */
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      font-size: 18px; /* bigger font */
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
-      overflow: hidden;
-      position: relative;
-    }
-    .card img {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      z-index: 0;
-      transition: transform 0.3s ease;
-    }
-    .card:hover img {
-      transform: scale(1.05);
-    }
-    .card span {
-      position: relative;
-      z-index: 1;
-      background: rgba(0,0,0,0.4);
-      padding: 8px 14px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-    }
-    .prev-trips {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    .trip-card {
-      background: rgba(255,255,255,0.15);
-      border-radius: 15px;
-      height: 150px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
-      font-size: 14px;
-      text-align: center;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .trip-card img {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      z-index: 0;
-      transition: transform 0.3s ease;
-    }
-    .trip-card:hover img {
-      transform: scale(1.05);
-    }
-    .trip-card span {
-      position: relative;
-      z-index: 1;
-      background: rgba(0,0,0,0.4);
-      padding: 5px 10px;
-      border-radius: 8px;
-      margin: 10px;
-    }
-    .plan-btn {
-      display: inline-block;
-      background: linear-gradient(90deg, #ffb347, #ff8c42);
-      padding: 12px 20px;
-      border-radius: 12px;
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      transition: 0.3s ease;
-    }
-    .plan-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0px 5px 15px rgba(255,140,66,0.4);
-    }
-    @media (max-width: 900px) {
-      .card-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 20px;
-      }
-      .card {
-        height: 180px;
-        font-size: 16px;
-      }
-    }
-    @media (max-width: 600px) {
-      .banner {
-        font-size: 22px;
-        height: 150px;
-      }
-      .card-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 15px;
-      }
-      .card {
-        height: 140px;
-        font-size: 14px;
-      }
-    }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #f3f8fc, #e8f5f1);
+  color: #1c1c1c;
+  padding: 20px;
+  padding-top: 80px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background bubbles */
+.bg-bubbles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.bg-bubbles span {
+  position: absolute;
+  display: block;
+  width: 20px;
+  height: 20px;
+  background: rgba(32, 201, 151, 0.1);
+  border-radius: 50%;
+  animation: rise 25s infinite ease-in;
+  bottom: -150px;
+}
+.bg-bubbles span:nth-child(1) { left: 10%; width: 30px; height: 30px; animation-delay: 0s; }
+.bg-bubbles span:nth-child(2) { left: 20%; animation-delay: 2s; }
+.bg-bubbles span:nth-child(3) { left: 70%; animation-delay: 4s; }
+.bg-bubbles span:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 30s; }
+.bg-bubbles span:nth-child(5) { left: 65%; animation-delay: 3s; }
+@keyframes rise {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  50% { opacity: 0.3; }
+  100% { transform: translateY(-1000px) scale(1.2); opacity: 0; }
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid #e0ebf4;
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  z-index: 10;
+}
+.navbar .logo {
+  font-weight: 700;
+  font-size: 24px;
+  user-select: none;
+  color: #20c997;
+}
+.navbar nav a {
+  color: #1c1c1c;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+.navbar nav a:hover {
+  color: #17b28c;
+}
+
+/* Banner */
+.banner {
+  background: url("{{ url_for('static', filename='images/banner.png') }}") center/cover no-repeat;
+  border-radius: 20px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  color: #1c1c1c;
+  text-shadow: 0 2px 8px rgba(255,255,255,0.4);
+  animation: fadeInUp 1s ease-in-out;
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Search Section */
+.search-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 25px;
+  animation: fadeInUp 1s ease 0.3s both;
+}
+.search-section input {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #dbe2ea;
+  background: #fdfefe;
+  color: #1c1c1c;
+  outline: none;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.search-section input::placeholder {
+  color: #6a6f7f;
+}
+.search-section input:focus {
+  border-color: #20c997;
+  background: #ffffff;
+}
+.search-section button {
+  background: #20c997;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.search-section button:hover {
+  background-color: #17b28c;
+  transform: translateY(-1px);
+}
+
+/* Headings */
+h2 {
+  font-size: 20px;
+  margin: 25px 0 15px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
+}
+.card, .trip-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  height: 250px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  font-size: 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  animation: fadeInUp 0.8s ease both;
+  box-shadow: 0 4px 20px rgba(32, 201, 151, 0.15);
+}
+.trip-card {
+  height: 150px;
+  font-size: 14px;
+}
+.card img, .trip-card img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: transform 0.3s ease;
+}
+.card:hover img, .trip-card:hover img {
+  transform: scale(1.05);
+}
+.card span, .trip-card span {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin: 12px;
+}
+
+/* Plan Button */
+.plan-btn {
+  display: inline-block;
+  background: #20c997;
+  padding: 12px 20px;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  margin-top: 20px;
+  transition: 0.3s ease;
+  animation: fadeInUp 0.8s ease-in-out 0.5s both;
+}
+.plan-btn:hover {
+  background-color: #17b28c;
+  transform: scale(1.05);
+  box-shadow: 0px 5px 15px rgba(32, 201, 151, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+  .card {
+    height: 180px;
+    font-size: 16px;
+  }
+}
+@media (max-width: 600px) {
+  .banner {
+    font-size: 22px;
+    height: 150px;
+  }
+  .card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  .card {
+    height:140px;
+    font-size: 14px;
+  }
+}
+
   </style>
 </head>
 <body>
-  <!-- Fixed Navbar -->
+  <!-- Animated Bubbles -->
+  <div class="bg-bubbles">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- Navbar -->
   <div class="navbar">
     <div class="logo">🌍 GlobeTrotter</div>
     <nav>
@@ -227,8 +264,10 @@
     </nav>
   </div>
 
+  <!-- Banner -->
   <div class="banner">Explore the World with Us 🌏</div>
 
+  <!-- Search -->
   <div class="search-section">
     <input type="text" id="searchBox" placeholder="Search..." />
     <button onclick="groupByRegion()">Group by</button>
@@ -263,7 +302,7 @@
   </div>
 
   <h2>Previous Trips</h2>
-  <div class="prev-trips" id="tripGrid">
+  <div class="card-grid" id="tripGrid">
     <div class="trip-card">
       <img src="{{ url_for('static', filename='images/amritsar.jpg') }}" alt="Amritsar" />
       <span>Amritsar</span>
