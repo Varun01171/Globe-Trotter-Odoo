@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS globe_trotter1 ;
+DROP DATABASE IF EXISTS globe_trotter1;
 CREATE DATABASE IF NOT EXISTS globe_trotter1;
 USE globe_trotter1;
 
@@ -6,18 +6,17 @@ USE globe_trotter1;
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50),
-    last_name VARCHAR(50),
     email VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
-    profile_image_url VARCHAR(255),
-    phone VARCHAR(20),
-    bio TEXT,
-    location VARCHAR(100),
-    status ENUM('active', 'inactive') DEFAULT 'active',
-    last_active DATETIME,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    password_hash VARCHAR(255) NOT NULL
 );
+
+-- Sample users with bcrypt hashes
+INSERT INTO users (first_name, email, password_hash) VALUES
+('Amit', 'amit@example.com', '$2b$12$PsaH1UOgZGgA1rP4XcZEr.2V0BzK1o2qQtp80wP4Yj4HtRk/hIN7u'), -- test123
+('Priya', 'priya@example.com', '$2b$12$8fx0n/dA3L1D8l7Ezy.o7Ogj4j.q0PTLgDcvjUo1n6gI9sKckPslC'), -- welcome
+('Rahul', 'rahul@example.com', '$2b$12$wF6j2jTDqOr4T5fYlEMiXeqyTuHuytKxQw07T4y9CrDplNzC4Yy3K'); -- mypass
+
+SELECT * FROM users;
 
 CREATE TABLE password_resets (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,7 +46,6 @@ CREATE TABLE cities (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     country VARCHAR(100) NOT NULL,
-    
     visits INT DEFAULT 0,
     growth_percentage DECIMAL(5,2) DEFAULT 0.00
 );
@@ -102,6 +100,20 @@ CREATE TABLE planned_trip_requests (
     status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- screen 7: Calendar Events
+CREATE TABLE calendar_events (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    trip_id INT NULL,
+    itinerary_section_id INT NULL,
+    title VARCHAR(150) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    event_type ENUM('trip', 'activity', 'other') DEFAULT 'trip',
+    color_code VARCHAR(20),
+    FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE,
+    FOREIGN KEY (itinerary_section_id) REFERENCES itinerary_sections(id) ON DELETE CASCADE
 );
 
 -- screen 8: Activities
@@ -185,7 +197,7 @@ CREATE TABLE post_comments (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- screen 11: User activity bookings (link users and activities)
+-- screen 11: User activity bookings
 CREATE TABLE user_activity_bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -195,16 +207,14 @@ CREATE TABLE user_activity_bookings (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE
 );
--- screen12:stats of admin
 
--- CITY_VISITS_TRENDS table (for storing visits count by date, for line chart)
+-- screen 12: Stats of admin
 CREATE TABLE city_visits_trends (
     id INT AUTO_INCREMENT PRIMARY KEY,
     date DATE NOT NULL,
     visits INT NOT NULL
 );
 
--- CITY_DEMOGRAPHICS table (user distribution by city groups)
 CREATE TABLE city_demographics (
     id INT AUTO_INCREMENT PRIMARY KEY,
     city_id INT NOT NULL,
@@ -212,10 +222,13 @@ CREATE TABLE city_demographics (
     FOREIGN KEY (city_id) REFERENCES cities(id) ON DELETE CASCADE
 );
 
--- REGIONAL_DISTRIBUTION table (users count per region)
 CREATE TABLE regional_distribution (
     id INT AUTO_INCREMENT PRIMARY KEY,
     region_name VARCHAR(100) NOT NULL,
     user_count INT NOT NULL,
     percentage DECIMAL(5,2) NOT NULL
 );
+
+
+ALTER TABLE trips 
+ADD COLUMN destination VARCHAR(255) NOT NULL;
