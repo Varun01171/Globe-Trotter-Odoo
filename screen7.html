@@ -1,178 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>User Profile - Screen 7</title>
 <style>
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #89f7fe, #66a6ff);
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 20px;
-        color: white;
-    }
-    .container {
-        max-width: 1100px;
-        width: 100%;
-    }
-    .glass-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(12px);
-        border-radius: 20px;
-        padding: 20px;
-        margin-bottom: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 4px 30px rgba(0,0,0,0.4);
-        transition: transform 0.3s ease, background 0.3s ease;
-    }
-    .glass-card:hover {
-        background: rgba(255, 255, 255, 0.08);
-        transform: translateY(-4px);
-    }
-    h1 {
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 2rem;
-        color: #ffffff;
-    }
-    .profile-header {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-    .user-image {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 0.9rem;
-        color: #cbd5e1;
-        border: 2px solid rgba(255, 255, 255, 0.1);
-    }
-    .user-details {
-        flex: 1;
-    }
-    .btn-edit {
-        display: inline-block;
-        padding: 8px 12px;
-        border-radius: 8px;
-        background: linear-gradient(45deg, #4b6cb7, #182848);
-        border: none;
-        color: white;
-        font-size: 0.9rem;
-        cursor: pointer;
-        margin-top: 10px;
-    }
-    .btn-edit:hover {
-        background: linear-gradient(45deg, #182848, #4b6cb7);
-    }
-    .section-title {
-        font-size: 1.2em;
-        margin-bottom: 15px;
-        font-weight: bold;
-    }
-    .trip-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 15px;
-    }
-    .trip-card {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 15px;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 150px;
-        transition: background 0.3s ease, transform 0.3s ease;
-    }
-    .trip-card:hover {
-        background: rgba(255, 255, 255, 0.15);
-        transform: scale(1.02);
-    }
-    .btn-view {
-        margin-top: auto;
-        padding: 8px;
-        border-radius: 8px;
-        background: linear-gradient(45deg, #38bdf8, #0ea5e9);
-        color: white;
-        text-align: center;
-        font-weight: bold;
-        cursor: pointer;
-        text-decoration: none;
-    }
-    .btn-view:hover {
-        background: linear-gradient(45deg, #0ea5e9, #38bdf8);
-    }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f3f8fc, #e8f5f1);
+    min-height: 100vh;
+    padding: 20px;
+    color: #1c1c1c;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  /* Tab navigation */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid #20c997;
+    margin-bottom: 20px;
+  }
+  .tab {
+    padding: 12px 25px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-bottom: none;
+    font-weight: 600;
+    color: #20c997;
+    transition: background-color 0.3s ease;
+  }
+  .tab:hover {
+    background-color: rgba(32, 201, 151, 0.1);
+  }
+  .tab.active {
+    background-color: white;
+    border-color: #20c997 #20c997 white #20c997;
+    border-radius: 10px 10px 0 0;
+    color: #117a5c;
+  }
+
+  /* Tab content sections */
+  .tab-content {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid #e0ebf4;
+    box-shadow: 0 4px 30px rgba(32, 201, 151, 0.1);
+  }
+  .tab-section {
+    display: none;
+  }
+  .tab-section.active {
+    display: block;
+  }
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .user-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #6a6f7f;
+    border: 2px solid #dbe2ea;
+  }
+  .user-details {
+    flex: 1;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    color: #20c997;
+  }
 </style>
 </head>
 <body>
 <div class="container">
-    <h1>👤 User Profile</h1>
+  <h1>👤 User Profile</h1>
 
-    <!-- Profile Info -->
-    <div class="glass-card profile-header">
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="profile">Profile</div>
+    <div class="tab" data-tab="trips">Trips</div>
+    <div class="tab" data-tab="settings">Settings</div>
+  </div>
+
+  <!-- Tab contents -->
+  <div class="tab-content">
+
+    <div id="profile" class="tab-section active">
+      <div class="profile-header">
         <div class="user-image">User Image</div>
         <div class="user-details">
-            <h2>GlobalTrotter</h2>
-            <p>User details with appropriate options to edit those information...</p>
-            <button class="btn-edit">Edit Profile</button>
+          <h2>{{ user.first_name }}</h2>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>User ID:</strong> {{ user.id }}</p>
         </div>
+      </div>
     </div>
 
-    <!-- Plan a New Trip -->
-    <div class="glass-card">
-        <div class="section-title">✈️ Plan a New Trip</div>
-        <p>Start planning your dream adventure with our step-by-step trip planner.</p>
-        <a href="#" class="btn-view">Plan Now</a>
+    <div id="trips" class="tab-section">
+      <h2>Your Trips</h2>
+      <p>Here you can show the user's trips — load dynamically from backend.</p>
+      <!-- Example trip cards or list -->
     </div>
 
-    <!-- Suggestions -->
-    <div class="glass-card">
-        <div class="section-title">💡 Suggested New Trips</div>
-        <div class="trip-grid">
-            <div class="trip-card">
-                <h3>🏝 Bali - 7 Days of Sun</h3>
-                <a href="#" class="btn-view">View</a>
-            </div>
-            <div class="trip-card">
-                <h3>🏔 Swiss Alps - Winter Fun</h3>
-                <a href="#" class="btn-view">View</a>
-            </div>
-            <div class="trip-card">
-                <h3>🏙 Tokyo - City Lights</h3>
-                <a href="#" class="btn-view">View</a>
-            </div>
-        </div>
+    <div id="settings" class="tab-section">
+      <h2>Settings</h2>
+      <p>Account settings, password change, etc. (Coming soon!)</p>
     </div>
 
-    <!-- Preplanned Trips -->
-    <div class="glass-card">
-        <div class="section-title">📅 Preplanned Trips</div>
-        <div class="trip-grid">
-            <div class="trip-card"><h3>Trip 1</h3><a href="#" class="btn-view">View</a></div>
-            <div class="trip-card"><h3>Trip 2</h3><a href="#" class="btn-view">View</a></div>
-            <div class="trip-card"><h3>Trip 3</h3><a href="#" class="btn-view">View</a></div>
-        </div>
-    </div>
-
-    <!-- Previous Trips -->
-    <div class="glass-card">
-        <div class="section-title">📜 Previous Trips</div>
-        <div class="trip-grid">
-            <div class="trip-card"><h3>Old Trip 1</h3><a href="#" class="btn-view">View</a></div>
-            <div class="trip-card"><h3>Old Trip 2</h3><a href="#" class="btn-view">View</a></div>
-            <div class="trip-card"><h3>Old Trip 3</h3><a href="#" class="btn-view">View</a></div>
-        </div>
-    </div>
+  </div>
 </div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const sections = document.querySelectorAll('.tab-section');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Remove active class from all tabs and sections
+      tabs.forEach(t => t.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+
+      // Add active class to clicked tab and corresponding section
+      tab.classList.add('active');
+      const tabId = tab.getAttribute('data-tab');
+      document.getElementById(tabId).classList.add('active');
+    });
+  });
+</script>
+
 </body>
 </html>
