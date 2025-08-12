@@ -10,110 +10,147 @@
   />
   <style>
     body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #00c6ff, #0072ff);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 20px;
-      color: white;
-    }
-    .container {
-      max-width: 950px;
-      width: 100%;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 25px;
-      font-size: 2.2rem;
-    }
-    .trip-card {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(15px);
-      padding: 20px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease, background 0.3s ease;
-    }
-    .trip-card:hover {
-      transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.25);
-    }
-    .trip-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .trip-title {
-      font-weight: 600;
-      font-size: 1.2rem;
-    }
-    .trip-desc {
-      font-size: 0.95rem;
-      line-height: 1.4;
-      margin-bottom: 15px;
-    }
-    .trip-inputs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-    }
-    .trip-inputs input {
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      outline: none;
-    }
-    input[type="date"] {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      filter: invert(1);
-      cursor: pointer;
-    }
-    .add-btn {
-      width: 100%;
-      padding: 15px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      background: linear-gradient(135deg, #ff7eb3, #ff758c);
-      border: none;
-      border-radius: 15px;
-      color: white;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: transform 0.3s ease, background 0.3s ease;
-    }
-    .add-btn:hover {
-      transform: scale(1.05);
-      background: linear-gradient(135deg, #ff758c, #ff7eb3);
-    }
-    .total-budget {
-      font-weight: 700;
-      font-size: 1.5rem;
-      margin-top: 20px;
-      text-align: right;
-    }
-    .section-title-input {
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: none;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      font-weight: 600;
-      font-size: 1rem;
-      outline: none;
-      min-width: 150px;
-    }
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f3f8fc, #e8f5f1);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  color: #1c1c1c;
+}
+
+.container {
+  max-width: 950px;
+  width: 100%;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+  color: #20c997;
+}
+
+/* Trip Card */
+.trip-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(15px);
+  padding: 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, background 0.3s ease;
+  border: 1px solid #e0ebf4;
+}
+
+.trip-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 1);
+}
+
+/* Header */
+.trip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.trip-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #1c1c1c;
+}
+
+.trip-desc {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 15px;
+  color: #6a6f7f;
+}
+
+/* Inputs */
+.trip-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.trip-inputs input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #dbe2ea;
+  background: #ffffff;
+  color: #1c1c1c;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.trip-inputs input:focus {
+  border-color: #20c997;
+}
+
+input[type="date"] {
+  background: #ffffff;
+  color: #1c1c1c;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+  cursor: pointer;
+}
+
+/* Add Button */
+.add-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: #20c997;
+  border: none;
+  border-radius: 15px;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.add-btn:hover {
+  transform: scale(1.05);
+  background-color: #17b28c;
+  box-shadow: 0px 5px 15px rgba(32, 201, 151, 0.25);
+}
+
+/* Total Budget */
+.total-budget {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-top: 20px;
+  text-align: right;
+  color: #20c997;
+}
+
+/* Section Title Input */
+.section-title-input {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #dbe2ea;
+  background: #ffffff;
+  color: #1c1c1c;
+  font-weight: 600;
+  font-size: 1rem;
+  outline: none;
+  min-width: 150px;
+}
+
+.section-title-input:focus {
+  border-color: #20c997;
+}
+
   </style>
 </head>
 <body>
