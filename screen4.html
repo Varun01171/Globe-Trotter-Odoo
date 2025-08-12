@@ -6,158 +6,209 @@
     <title>Create New Trip - GlobeTrotter</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #6dd5fa, #2980b9);
-            color: white;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        header {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 20px;
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.2);
-        }
-        .form-section {
-            margin-bottom: 30px;
-        }
-        .form-section h2 {
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            outline: none;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-size: 14px;
-        }
-        .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        .submit-btn {
-            display: inline-block;
-            background: linear-gradient(90deg, #ffb347, #ff8c42);
-            padding: 12px 20px;
-            border-radius: 12px;
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .submit-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 5px 15px rgba(255, 140, 66, 0.4);
-        }
-        .suggestions h2 {
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-        }
-        .card {
-            position: relative;
-            border-radius: 15px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-        .card:hover img {
-            transform: scale(1.1);
-        }
-        .card::after {
-            content: attr(data-title);
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            font-size: 14px;
-            text-align: center;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.3);
-        }
-        @media (max-width: 600px) {
-            header {
-                font-size: 20px;
-            }
-            .card img {
-                height: 120px;
-            }
-        }
+       * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f3f8fc, #e8f5f1);
+    color: #1c1c1c;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #20c997;
+}
+
+/* Glass Card */
+.glass-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e0ebf4;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 30px;
+}
+
+.form-section h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #1c1c1c;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #6a6f7f;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #dbe2ea;
+    outline: none;
+    background: #fdfefe;
+    color: #1c1c1c;
+    font-size: 14px;
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.form-group input::placeholder {
+    color: #9ea5b1;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #20c997;
+    background: #ffffff;
+}
+
+/* Submit Button */
+.submit-btn {
+    display: inline-block;
+    background: #20c997;
+    padding: 12px 20px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #17b28c;
+    transform: translateY(-1px);
+    box-shadow: 0px 5px 15px rgba(32, 201, 151, 0.25);
+}
+
+/* Suggestions */
+.suggestions h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #1c1c1c;
+}
+
+/* Card Grid */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.card {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e0ebf4;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.card:hover img {
+    transform: scale(1.1);
+}
+
+.card::after {
+    content: attr(data-title);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    font-size: 14px;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 5px 15px rgba(32, 201, 151, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    header {
+        font-size: 20px;
+    }
+    .card img {
+        height: 120px;
+    }
+}
+
     </style>
 </head>
+ </head>
 <body>
     <header>🌍 GlobeTrotter - Create a New Trip</header>
-    <div class="glass-card form-section">
-        <h2>Plan a New Trip</h2>
-        <div class="form-group">
-            <label for="startDate">Start Date</label>
-            <input type="date" id="startDate" name="startDate">
-        </div>
-        <div class="form-group">
-            <label for="place">Select a Place</label>
-            <select id="place" name="place">
-                <option value="">--Choose a destination--</option>
-                <option>Delhi</option>
-                <option>Mumbai</option>
-                <option>Manali</option>
-                <option>Pune</option>
-                <option>Chandigarh</option>
-                <option>Amritsar</option>
-                <option>Hyderabad</option>
-                <option>Kerala</option>
-                <option>Kochi</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="endDate">End Date</label>
-            <input type="date" id="endDate" name="endDate">
-        </div>
 
-        <!-- Link that redirects to next page -->
-        <a href="{{ url_for('next_page') }}" class="submit-btn">Next</a>
+    <!-- Plan Trip Form -->
+
+        <div class="form-group">
+        <form method="POST" action="{{ url_for('plan_trip') }}" class="glass-card form-section">
+    <h2>Plan a New Trip</h2>
+
+    <div class="form-group">
+        <label for="start_date">Start Date</label>
+        <input type="date" id="start_date" name="start_date" required>
     </div>
+
+    <div class="form-group">
+        <label for="destination">Select a Place</label>
+        <select id="destination" name="destination" required>
+            <option value="">--Choose a destination--</option>
+            <option>Delhi</option>
+            <option>Mumbai</option>
+            <option>Manali</option>
+            <option>Pune</option>
+            <option>Chandigarh</option>
+            <option>Amritsar</option>
+            <option>Hyderabad</option>
+            <option>Kerala</option>
+            <option>Kochi</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="end_date">End Date</label>
+        <input type="date" id="end_date" name="end_date" required>
+    </div>
+
+    <button type="submit" class="submit-btn">Next</button>
+</form>
+
+    <!-- Suggestions Section -->
     <div class="glass-card suggestions">
         <h2>Suggestions for Places & Activities</h2>
         <div class="card-grid">
@@ -177,3 +228,4 @@
     </div>
 </body>
 </html>
+</body>
